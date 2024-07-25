@@ -6,13 +6,16 @@
     <title>CCBIO CyclAmidImid</title>
     <link rel="stylesheet" href="static/style.css">
     <style>
+        /* Override external styles */
         body {
-            margin: 0;
             font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background-color: #f0f0f0;
         }
 
         .header {
@@ -84,6 +87,7 @@
             padding: 10px;
             scroll-behavior: smooth;
             flex: 1;
+            margin: 0; /* Override margin */
         }
 
         .button-container::-webkit-scrollbar {
@@ -108,6 +112,7 @@
             width: 100%;
             max-width: 300px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 0; /* Override margin */
         }
 
         .button-container button:hover {
