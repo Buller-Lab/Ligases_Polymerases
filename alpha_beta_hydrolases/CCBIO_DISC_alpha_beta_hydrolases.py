@@ -2,8 +2,8 @@ import os
 import pandas as pd
 import subprocess
 
-input_fasta = "minus_gamma_lactamase_seeds.fasta"
-project_name = "minusus_gamma_lactamases_NR"
+input_fasta = "alpha_beta_hydrolases_seeds.fasta"
+project_name = "alpha_beta_hydrolases_NR"
 database = "/home/stcg/Documents/mmseqs_dbs/NR"
 output_dir = project_name
 
