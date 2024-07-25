@@ -12,7 +12,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background-color: #f0f0f0; /* Background color from style.css */
+            background-color: #f0f0f0;
         }
 
         .header {
@@ -30,11 +30,11 @@
         h1 {
             margin: 0;
             font-size: 24px;
-            color: #333; /* Color from style.css */
+            color: #333;
         }
 
         .main-content {
-            margin-top: 70px; /* Adjusted margin to avoid overlap with header */
+            margin-top: 70px;
             padding: 20px;
             flex: 1;
             display: flex;
@@ -67,7 +67,7 @@
             min-height: 250px;
             width: 100%; /* Responsive width */
             max-width: 300px; /* Limit width */
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better visibility */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .button-container button:hover {
@@ -83,13 +83,13 @@
         /* Media queries for responsive design */
         @media (max-width: 1200px) {
             .button-container button {
-                max-width: 45%; /* Show two buttons per row on medium screens */
+                max-width: 45%; /* Two buttons per row on medium screens */
             }
         }
 
         @media (max-width: 768px) {
             .button-container button {
-                max-width: 90%; /* Show one button per row on small screens */
+                max-width: 90%; /* One button per row on small screens */
             }
         }
 
@@ -156,9 +156,16 @@
                 <img src="./static/oplab.png" alt="">
                 <span class="bold-number">missing in CATH</span><br>
                 Hydantoinase/Oxoprolinase family<br>
-                EC: 3.5.2.9<br>
+                EC: 3.5.2.9, 3.5.2.14<br>
                 e.g. 5-oxoprolinase (ATP-hydrolysing)
-            </button>                    
+            </button>         
+            <button onclick="location.href='homolog_discovery.html'">
+                <img src="./static/metal_dep_hydrol.png" alt="">
+                <span class="bold-number">3.20.20.140</span><br>
+                Metal-dependent hydrolases<br>
+                EC: 3.5.2.2, 3.5.2.3, 3.5.2.4, 3.5.2.18<br>
+                e.g. dihydropyrimidinase/hydantoinase
+            </button>                         
         </div>
     </div>
 
