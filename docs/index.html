@@ -48,13 +48,12 @@
             flex-wrap: wrap; /* Allow buttons to wrap */
             gap: 10px; /* Space between buttons */
             justify-content: center;
-            margin: 0; /* Remove margin conflicts */
         }
 
         .button-container button {
             padding: 10px;
             border: none;
-            border-radius: 5px;
+            border-radius: 8px; /* Uniform rounded corners */
             color: white;
             background-color: #007bff;
             text-align: center;
@@ -68,6 +67,7 @@
             min-height: 250px;
             width: 100%; /* Responsive width */
             max-width: 300px; /* Limit width */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: Add shadow for better visibility */
         }
 
         .button-container button:hover {
@@ -78,6 +78,19 @@
             width: 50%;
             height: auto;
             margin-bottom: 10px;
+        }
+
+        /* Media queries for responsive design */
+        @media (max-width: 1200px) {
+            .button-container button {
+                max-width: 45%; /* Show two buttons per row on medium screens */
+            }
+        }
+
+        @media (max-width: 768px) {
+            .button-container button {
+                max-width: 90%; /* Show one button per row on small screens */
+            }
         }
 
         .footer {
@@ -139,6 +152,13 @@
                 EC: 3.5.2.B3<br>
                 e.g. (−)-γ-lactamases
             </button>        
+            <button onclick="location.href='homolog_discovery.html'">
+                <img src="./static/oplab.png" alt="">
+                <span class="bold-number">missing in CATH</span><br>
+                Hydantoinase/Oxoprolinase family<br>
+                EC: 3.5.2.9<br>
+                e.g. 5-oxoprolinase (ATP-hydrolysing)
+            </button>                    
         </div>
     </div>
 
