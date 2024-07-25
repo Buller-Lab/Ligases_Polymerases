@@ -38,22 +38,59 @@
             padding: 20px;
             flex: 1;
             display: flex;
-            justify-content: center;
-            align-items: flex-start;
+            flex-direction: column;
+            align-items: center;
             overflow: hidden;
+        }
+
+        .gallery-container {
+            position: relative;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .arrow-left, .arrow-right {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 24px;
+            z-index: 1001;
+        }
+
+        .arrow-left {
+            left: 0;
+        }
+
+        .arrow-right {
+            right: 0;
+        }
+
+        .arrow-left:hover, .arrow-right:hover {
+            background-color: #0056b3;
         }
 
         .button-container {
             display: flex;
-            flex-wrap: wrap; /* Allow buttons to wrap */
-            gap: 10px; /* Space between buttons */
-            justify-content: center;
+            gap: 10px;
+            overflow-x: auto;
+            padding: 10px;
+            scroll-behavior: smooth;
+            width: 100%;
+        }
+
+        .button-container::-webkit-scrollbar {
+            display: none; /* Hide scrollbar for WebKit browsers */
         }
 
         .button-container button {
             padding: 10px;
             border: none;
-            border-radius: 8px; /* Uniform rounded corners */
+            border-radius: 8px;
             color: white;
             background-color: #007bff;
             text-align: center;
@@ -65,8 +102,8 @@
             font-size: 16px;
             box-sizing: border-box;
             min-height: 250px;
-            width: 100%; /* Responsive width */
-            max-width: 300px; /* Limit width */
+            width: 100%;
+            max-width: 300px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
@@ -83,13 +120,13 @@
         /* Media queries for responsive design */
         @media (max-width: 1200px) {
             .button-container button {
-                max-width: 45%; /* Two buttons per row on medium screens */
+                max-width: 45%;
             }
         }
 
         @media (max-width: 768px) {
             .button-container button {
-                max-width: 90%; /* One button per row on small screens */
+                max-width: 90%;
             }
         }
 
@@ -123,49 +160,60 @@
     </div>
     
     <div class="main-content">
-        <div class="button-container">
-            <button onclick="location.href='homolog_discovery.html'">
-                <img src="./static/ser_lacta.png" alt="">
-                <span class="bold-number">3.40.710.10</span><br>
-                DD-peptidase/β-Lactamase superfamily<br>
-                EC: 3.5.2.6<br>
-                e.g. (Serine) β-Lactamase (class A, C, D)
-            </button>
-            <button onclick="location.href='homolog_discovery.html'">
-                <img src="./static/m_lacta.png" alt="">
-                <span class="bold-number">3.40.50.1820</span><br>
-                Ribonuclease Z/Hydroxyacylglutathione hydrolase-like<br>
-                EC: 3.5.2.6<br>
-                e.g. (Metallo) β-Lactamase (class B)
-            </button>         
-            <button onclick="location.href='homolog_discovery.html'">
-                <img src="./static/amidase_signature.png" alt="">
-                <span class="bold-number">3.90.1300.10</span><br>
-                Amidase signature family<br>
-                EC: 3.5.2.B2<br>
-                e.g. (+)-γ-lactamases
-            </button>
-            <button onclick="location.href='homolog_discovery.html'">
-                <img src="./static/calb_yellow.png" alt="">
-                <span class="bold-number">3.40.50.1820</span><br>
-                α/β-Hydrolases<br>
-                EC: 3.5.2.B3<br>
-                e.g. (−)-γ-lactamases
-            </button>        
-            <button onclick="location.href='homolog_discovery.html'">
-                <img src="./static/oplab.png" alt="">
-                <span class="bold-number">missing in CATH</span><br>
-                Hydantoinase/Oxoprolinase family<br>
-                EC: 3.5.2.9, 3.5.2.14<br>
-                e.g. 5-oxoprolinase (ATP-hydrolysing)
-            </button>         
-            <button onclick="location.href='homolog_discovery.html'">
-                <img src="./static/metal_dep_hydrol.png" alt="">
-                <span class="bold-number">3.20.20.140</span><br>
-                Metal-dependent hydrolases<br>
-                EC: 3.5.2.2, 3.5.2.3, 3.5.2.4, 3.5.2.18<br>
-                e.g. dihydropyrimidinase/hydantoinase
-            </button>                         
+        <div class="gallery-container">
+            <div class="arrow-left" onclick="scrollLeft()">&#10094;</div>
+            <div class="arrow-right" onclick="scrollRight()">&#10095;</div>
+            <div class="button-container">
+                <button onclick="location.href='homolog_discovery.html'">
+                    <img src="./static/ser_lacta.png" alt="">
+                    <span class="bold-number">3.40.710.10</span><br>
+                    DD-peptidase/β-Lactamase superfamily<br>
+                    EC: 3.5.2.6<br>
+                    e.g. (Serine) β-Lactamase (class A, C, D)
+                </button>
+                <button onclick="location.href='homolog_discovery.html'">
+                    <img src="./static/m_lacta.png" alt="">
+                    <span class="bold-number">3.40.50.1820</span><br>
+                    Ribonuclease Z/Hydroxyacylglutathione hydrolase-like<br>
+                    EC: 3.5.2.6<br>
+                    e.g. (Metallo) β-Lactamase (class B)
+                </button>         
+                <button onclick="location.href='homolog_discovery.html'">
+                    <img src="./static/amidase_signature.png" alt="">
+                    <span class="bold-number">3.90.1300.10</span><br>
+                    Amidase signature family<br>
+                    EC: 3.5.2.B2<br>
+                    e.g. (+)-γ-lactamases
+                </button>
+                <button onclick="location.href='homolog_discovery.html'">
+                    <img src="./static/calb_yellow.png" alt="">
+                    <span class="bold-number">3.40.50.1820</span><br>
+                    α/β-Hydrolases<br>
+                    EC: 3.5.2.B3<br>
+                    e.g. (−)-γ-lactamases
+                </button>        
+                <button onclick="location.href='homolog_discovery.html'">
+                    <img src="./static/oplab.png" alt="">
+                    <span class="bold-number">missing in CATH</span><br>
+                    Hydantoinase/Oxoprolinase family<br>
+                    EC: 3.5.2.9, 3.5.2.14<br>
+                    e.g. 5-oxoprolinase (ATP-hydrolysing)
+                </button>         
+                <button onclick="location.href='homolog_discovery.html'">
+                    <img src="./static/metal_dep_hydrol.png" alt="">
+                    <span class="bold-number">3.20.20.140</span><br>
+                    Metal-dependent hydrolases<br>
+                    EC: 3.5.2.2, 3.5.2.3, 3.5.2.4, 3.5.2.18<br>
+                    e.g. dihydropyrimidinase/hydantoinase
+                </button>  
+                <button onclick="location.href='homolog_discovery.html'">
+                    <img src="./static/allantoinase.png" alt="">
+                    <span class="bold-number">3.20.20.370</span><br>
+                    Glycoside hydrolase/ deacetylase<br>
+                    EC: 3.5.2.5, 3.5.2.18<br>
+                    e.g. allantoinase/enamidase
+                </button>                                   
+            </div>
         </div>
     </div>
 
@@ -173,5 +221,21 @@
         <button onclick="window.location.href='https://www.github.com/ccbiozhaw/CyclAmidImid'">GitHub</button>
         <button onclick="window.location.href='imprint.html'">Imprint</button>
     </div>
+
+    <script>
+        function scrollLeft() {
+            document.querySelector('.button-container').scrollBy({
+                left: -300,
+                behavior: 'smooth'
+            });
+        }
+
+        function scrollRight() {
+            document.querySelector('.button-container').scrollBy({
+                left: 300,
+                behavior: 'smooth'
+            });
+        }
+    </script>
 </body>
 </html>
