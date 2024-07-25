@@ -1,6 +1,9 @@
 # CyclAmidImid
 
-Code and databases for the publication: "Nature’s Diverse Biocatalytic Toolbox for Hydrolysis of Lactams and Cyclic Imides"
+## Code and databases for the publication: "Nature’s Diverse Biocatalytic Toolbox for Hydrolysis of Lactams and Cyclic Imides"
+
+![image](https://github.com/user-attachments/assets/2d5b91d4-3c0e-4532-8168-1bcfbe4535d8)
+
 
 ## Background
 
