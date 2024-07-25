@@ -36,7 +36,7 @@
         .button-wrapper {
             flex: 1;
             overflow-y: auto; /* Makes the container scrollable */
-            padding: 80px 20px 60px; /* Add padding to account for fixed header and footer */
+            padding: 70px 20px 60px; /* Add padding to account for fixed header and footer */
             display: flex;
             justify-content: center;
         }
@@ -66,6 +66,7 @@
             box-sizing: border-box;
             /* Width and height will be set dynamically by JavaScript */
             min-height: 250px; /* Set a fixed height */
+            width: 300px; /* Set a fixed width for consistent appearance */
         }
 
         .button-container button:hover {
@@ -73,7 +74,8 @@
         }
 
         .button-container button img {
-            max-width: 100px; /* Adjust the size of the image as needed */
+            width: 25%; /* Image height will be 25% of button height */
+            height: auto; /* Maintain aspect ratio */
             margin-bottom: 10px; /* Space between image and text */
         }
 
