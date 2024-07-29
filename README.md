@@ -5,6 +5,7 @@ Code and databases for the publication:
 Peter Stockinger, [a] and Rebecca Buller*[a]
 
 [a] Competence Center for Biocatalysis, Institute of Chemistry and Biotechnology, Zurich University of Applied Sciences, Einsiedlerstrasse 31, 8820 Wädenswil, Switzerland
+
 Keywords: Amidase · Imidase · Hydrolase · Amidohydrolase ·Lactamase ·Lactams ·Imides ·Cyclic ·Amides ·Biocatalysis · Hydantoinases · Dihydropyrimidinases 
 
 ![image](https://github.com/user-attachments/assets/33f5a252-cd52-4b03-b85d-a35f022a7b8f)
