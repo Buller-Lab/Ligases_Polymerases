@@ -27,6 +27,7 @@ button {
     margin-left: 10px;
     margin-top: 10px;    
     display: inline-block;
+    max-height: 50vh;
 }
 
 button:hover {
