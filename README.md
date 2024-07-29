@@ -12,7 +12,7 @@ Keywords: Amidase · Imidase · Hydrolase · Amidohydrolase ·Lactamase ·Lactam
 
 ## Background
 
-The historical development of various naming and classification schemes to describe enzymes with hydrolytic activity toward lactams and cyclic imides has contributed to a fragmented landscape that poses challenges in the search for novel biocatalysts, particularly for organic synthesis in the pharmaceutical and fine chemical industry. To identify (novel) hydrolytic enzymes suitable for application, we thus suggest to not only rely on functional classifiers (such as EC numbers: https://brenda-enzymes.org/) but also use structural folds as a search criterium (CATH IDs:https://www.cathdb.info/). In this context, we have generated a data repository of promising hydrolase superfamilies to facilitate the identification of cyclic imide or lactam hydrolyzing enzymes.
+The historical development of various naming and classification schemes to describe enzymes with hydrolytic activity toward lactams and cyclic imides has contributed to a fragmented landscape that poses challenges in the search for novel biocatalysts, particularly for organic synthesis in the pharmaceutical and fine chemical industry. To identify (novel) hydrolytic enzymes suitable for application, we thus suggest to not only rely on functional classifiers (such as EC numbers: https://brenda-enzymes.org/) but also use structural folds as a search criterium (CATH IDs: https://www.cathdb.info/). In this context, we have generated a data repository of promising hydrolase superfamilies to facilitate the identification of cyclic imide or lactam hydrolyzing enzymes.
 
 ## Databases
 
