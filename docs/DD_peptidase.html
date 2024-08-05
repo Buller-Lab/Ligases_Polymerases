@@ -211,6 +211,43 @@
         .spaced-div {
             margin-bottom: 20px; /* Adjust the value as needed */
         }
+
+        /* Basic styles for the popup */
+        .popup {
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                padding: 20px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                z-index: 1000;
+                width: 300px;
+                text-align: center;
+            }
+        
+            /* Background overlay */
+            .popup-overlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5);
+                z-index: 999;
+            }
+        
+            /* Popup button styles */
+            .popup button {
+                margin-top: 10px;
+            }
+        
+            /* Hide popup initially */
+            .popup-hidden {
+                display: none;
+            }    
     </style>
     <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.20.1/dist/cytoscape.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
@@ -283,7 +320,6 @@
                     <tbody></tbody>
                 </table>
             </div>
-        
             <script>
             document.addEventListener('DOMContentLoaded', function() {
                 var cy = window.cy = cytoscape({
@@ -497,7 +533,7 @@
                                 'ID': row.cells[0].textContent.trim(),
                                 'Name': row.cells[1].textContent.trim(),
                                 'Length': row.cells[2].textContent.trim(),
-                                'SeqID Seed': row.cells[3].textContent.trim(),
+                                'SeqID_Seed': row.cells[3].textContent.trim(),
                                 'Organism': row.cells[4].textContent.trim(),
                                 'Color': row.cells[5].textContent.trim(),
                                 'Sequence': row.cells[6].textContent.trim()
@@ -515,6 +551,9 @@
                         <a href="#" id="download-excel">Download Excel File</a>
                         <button id="close-popup">Close</button>
                     `;
+                    var overlay = document.createElement('div');
+                    overlay.className = 'popup-overlay';
+                    document.body.appendChild(overlay);
                     document.body.appendChild(popup);
                 
                     document.getElementById('download-excel').addEventListener('click', function() {
@@ -530,6 +569,7 @@
                 
                     document.getElementById('close-popup').addEventListener('click', function() {
                         document.body.removeChild(popup);
+                        document.body.removeChild(overlay);
                     });
                 }
             
@@ -537,7 +577,6 @@
             });
             </script>
 
-                
 
 </body>
 </html>
