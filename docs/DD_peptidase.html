@@ -166,99 +166,123 @@
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/cytoscape@3.20.1/dist/cytoscape.min.js"></script>
-</head>
-<body>
-    <div class="container">     
-        <div class="sidebar">
-            <div style="margin-top: 10px; font-size: 2em; font-weight: bold;">
-                Discovery Suite
-            </div>              
-            <div>
-                <img src="./static/ser_lacta.png" alt="" style="max-width: 100%;">
-            </div>
-            <div style="margin-top: 10px; font-size: 1.5em; font-weight: bold;">
-                Filters
-            </div>
-            <div>
-                <label for="filter-annotation">Annotation:</label>
-                <input type="text" id="filter-annotation">
-            </div>
-            <div>
-                <label for="filter-length">Length (Range):</label>
-                <input type="text" id="filter-length-from" placeholder="From">
-                <input type="text" id="filter-length-to" placeholder="To">
-            </div>
-            <div>
-                <label for="filter-SeqID">SeqID (Range):</label>
-                <input type="text" id="filter-SeqID-from" placeholder="From">
-                <input type="text" id="filter-SeqID-to" placeholder="To">
-            </div>               
-            <div style="margin-top: 10px; text-align: center;">    
-                <button class="button" onclick="location.href='/'">Back</button>  
-            </div>  
- 
-        </div>
-
-        <div class="network-container">
-            <div id="cy"></div>
-            <div id="loading" class="loading">
-                Loading network...
-                <div class="progress-bar-container">
-                    <div class="progress-bar" id="progress-bar"></div>
+        </head>
+        <body>
+            <div class="container">     
+                <div class="sidebar">
+                    <div style="margin-top: 10px; font-size: 2em; font-weight: bold;">
+                        3.40.710.10
+                    </div>              
+                    <div>
+                        <img src="./static/ser_lacta.png" alt="" style="max-width: 100%;">
+                    </div>
+                    <div style="margin-top: 10px; font-size: 1.5em; font-weight: bold;">
+                        Filters
+                    </div>
+                    <div>
+                        <label for="filter-annotation">Annotation:</label>
+                        <select id="filter-annotation">
+                            <option value="">Select an annotation</option>
+                            <!-- Options will be populated dynamically -->
+                        </select>
+                    </div>
+                
+                    <div>
+                        <label for="filter-length">Length (Range):</label>
+                        <input type="text" id="filter-length-from" placeholder="From">
+                        <input type="text" id="filter-length-to" placeholder="To">
+                    </div>
+                    <div>
+                        <label for="filter-SeqID">SeqID (Range):</label>
+                        <input type="text" id="filter-SeqID-from" placeholder="From">
+                        <input type="text" id="filter-SeqID-to" placeholder="To">
+                    </div>               
+                    <div style="margin-top: 10px; text-align: center;">    
+                        <button class="button" onclick="location.href='/'">Back</button>  
+                    </div>  
+                
+                </div>
+            
+                <div class="network-container">
+                    <div id="cy"></div>
+                    <div id="loading" class="loading">
+                        Loading network...
+                        <div class="progress-bar-container">
+                            <div class="progress-bar" id="progress-bar"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <div id="table-container">
-        <table id="node-table">
-            <thead>
-                <tr>
-                    <th data-sort-by="id">ID</th>
-                    <th data-sort-by="name">Name</th>
-                    <th data-sort-by="Length">Length</th>
-                    <th data-sort-by="SeqID_Seed">SeqID</th>                                          
-                    <th data-sort-by="Organism">Organism</th>   
-                    <th data-sort-by="Color">Annotation</th>                          
-                    <th data-sort-by="Sequence">Sequence</th>                                                                        
-                </tr>
-            </thead>
-            <tbody></tbody>
-        </table>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function(){
+        
+            <div id="table-container">
+                <table id="node-table">
+                    <thead>
+                        <tr>
+                            <th data-sort-by="id">ID</th>
+                            <th data-sort-by="name">Name</th>
+                            <th data-sort-by="Length">Length</th>
+                            <th data-sort-by="SeqID_Seed">SeqID</th>                                          
+                            <th data-sort-by="Organism">Organism</th>   
+                            <th data-sort-by="Color">Annotation</th>                          
+                            <th data-sort-by="Sequence">Sequence</th>                                                                        
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        
+            <script>
+        document.addEventListener('DOMContentLoaded', function() {
             var cy = window.cy = cytoscape({
                 container: document.getElementById('cy'),
                 elements: [], // Your elements data will be loaded dynamically
                 layout: { name: 'grid', fit: true, padding: 20 },
                 style: [] // Your stylesheet for node styles
             });
-
+        
             var loadingIndicator = document.getElementById('loading');
             var progressBar = document.getElementById('progress-bar');
             var progressBarContainer = document.querySelector('.progress-bar-container');
-
+        
             function updateTable(selectedNodes) {
                 var tableBody = document.querySelector('#node-table tbody');
                 tableBody.innerHTML = '';
-
-                selectedNodes.forEach(function(node){
+            
+                selectedNodes.forEach(function(node) {
                     var row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${node.id()}</td>
                         <td>${node.data('name')}</td>
                         <td>${node.data('Length')}</td>
-                        <td>${node.data('SeqID_Seed')}</td>      
-                        <td>${node.data('Organism')}</td>                                             
-                        <td>${node.data('Color')}</td>      
-                        <td>${node.data('Sequence')}</td>                                           
+                        <td>${node.data('SeqID_Seed')}</td>
+                        <td>${node.data('Organism')}</td>
+                        <td>${node.data('Color')}</td>
+                        <td>${node.data('Sequence')}</td>
                     `;
                     tableBody.appendChild(row);
                 });
+            
+                populateAnnotationDropdown();
             }
-
+        
+            function populateAnnotationDropdown() {
+                var dropdown = document.querySelector('#filter-annotation');
+                var annotations = new Set();
+            
+                cy.nodes().forEach(function(node) {
+                    annotations.add(node.data('Color'));
+                });
+            
+                dropdown.innerHTML = '<option value="">Select an annotation</option>'; // Reset dropdown
+            
+                annotations.forEach(function(annotation) {
+                    var option = document.createElement('option');
+                    option.value = annotation;
+                    option.textContent = annotation;
+                    dropdown.appendChild(option);
+                });
+            }
+        
             function updateNetwork(nodes) {
                 cy.elements().hide();
                 nodes.forEach(node => {
@@ -267,11 +291,11 @@
                 });
                 cy.fit();
             }
-
+        
             function loadDataInChunks(data, chunkSize) {
                 return new Promise((resolve) => {
                     let index = 0;
-
+                
                     function loadChunk() {
                         if (index < data.length) {
                             let chunk = data.slice(index, index + chunkSize);
@@ -282,17 +306,17 @@
                             if (!progressBarContainer.style.display || progressBarContainer.style.display === 'none') {
                                 progressBarContainer.style.display = 'block'; // Show progress bar container
                             }
-
+                        
                             requestAnimationFrame(loadChunk);
                         } else {
                             resolve();
                         }
                     }
-
+                
                     loadChunk();
                 });
             }
-
+        
             fetch('./static/petase_60.cyjs')
                 .then(response => response.json())
                 .then(data => {
@@ -309,13 +333,13 @@
                     console.error('Error loading cyjs file:', error);
                     loadingIndicator.textContent = 'Error loading network data';
                 });
-
+            
             function sortTable(columnIndex) {
                 var table = document.querySelector('#node-table');
                 var rows = Array.from(table.rows).slice(1);
                 var sortFactor = 1;
                 var currentClass = table.rows[0].cells[columnIndex].className;
-
+            
                 if (currentClass.includes('asc')) {
                     table.rows[0].cells[columnIndex].classList.remove('asc');
                     table.rows[0].cells[columnIndex].classList.add('desc');
@@ -326,59 +350,59 @@
                 } else {
                     table.rows[0].cells[columnIndex].classList.add('asc');
                 }
-
+            
                 rows.sort((a, b) => {
                     var aValue = a.cells[columnIndex].textContent.trim();
                     var bValue = b.cells[columnIndex].textContent.trim();
                     return (parseInt(aValue) - parseInt(bValue)) * sortFactor;
                 });
-
+            
                 rows.forEach(row => table.appendChild(row));
             }
-
+        
             document.querySelectorAll('#node-table th').forEach((header, index) => {
                 header.addEventListener('click', () => sortTable(index));
             });
-
-            cy.on('select', 'node', function(event){
+        
+            cy.on('select', 'node', function(event) {
                 var selectedNodes = cy.$('node:selected');
                 updateTable(selectedNodes);
             });
-
-            cy.on('unselect', 'node', function(event){
+        
+            cy.on('unselect', 'node', function(event) {
                 var allNodes = cy.nodes();
                 updateTable(allNodes);
             });
-
-            var filterAnnotationInput = document.querySelector('#filter-annotation');
+        
+            var filterAnnotationDropdown = document.querySelector('#filter-annotation');
             var filterLengthFromInput = document.querySelector('#filter-length-from');
             var filterLengthToInput = document.querySelector('#filter-length-to');
             var filterSeqIDFromInput = document.querySelector('#filter-SeqID-from');
             var filterSeqIDToInput = document.querySelector('#filter-SeqID-to');
-
-            filterAnnotationInput.addEventListener('input', handleFilter);
+        
+            filterAnnotationDropdown.addEventListener('change', handleFilter);
             filterLengthFromInput.addEventListener('input', handleFilter);
             filterLengthToInput.addEventListener('input', handleFilter);
             filterSeqIDFromInput.addEventListener('input', handleFilter);
             filterSeqIDToInput.addEventListener('input', handleFilter);
-
+        
             function handleFilter() {
-                var filterAnnotationValue = filterAnnotationInput.value.trim().toLowerCase();
+                var filterAnnotationValue = filterAnnotationDropdown.value.trim().toLowerCase();
                 var filterLengthFromValue = filterLengthFromInput.value.trim();
                 var filterLengthToValue = filterLengthToInput.value.trim();
                 var filterSeqIDFromValue = filterSeqIDFromInput.value.trim();
                 var filterSeqIDToValue = filterSeqIDToInput.value.trim();
-
+            
                 var rows = document.querySelectorAll('#node-table tbody tr');
-
+            
                 rows.forEach(function(row) {
                     var annotationCellValue = row.cells[5].textContent.trim().toLowerCase();
                     var lengthCellValue = parseInt(row.cells[2].textContent.trim(), 10);
                     var seqIDCellValue = parseFloat(row.cells[3].textContent.trim());
-
-                    var annotationMatch = annotationCellValue.includes(filterAnnotationValue);
+                
+                    var annotationMatch = (filterAnnotationValue === "" || annotationCellValue === filterAnnotationValue);
                     var lengthMatch = true;
-
+                
                     if (filterLengthFromValue && filterLengthToValue) {
                         var fromValue = parseInt(filterLengthFromValue);
                         var toValue = parseInt(filterLengthToValue);
@@ -390,9 +414,9 @@
                         var toValue = parseInt(filterLengthToValue);
                         lengthMatch = !isNaN(lengthCellValue) && lengthCellValue <= toValue;
                     }
-
+                
                     var seqIDMatch = true;
-
+                
                     if (filterSeqIDFromValue && filterSeqIDToValue) {
                         var fromValue = parseFloat(filterSeqIDFromValue);
                         var toValue = parseFloat(filterSeqIDToValue);
@@ -404,19 +428,20 @@
                         var toValue = parseFloat(filterSeqIDToValue);
                         seqIDMatch = !isNaN(seqIDCellValue) && seqIDCellValue <= toValue;
                     }
-
+                
                     if (annotationMatch && lengthMatch && seqIDMatch) {
                         row.style.display = '';
                     } else {
                         row.style.display = 'none';
                     }
                 });
-
+            
                 var visibleNodes = Array.from(rows).filter(row => row.style.display !== 'none');
                 var cyNodes = visibleNodes.map(row => cy.getElementById(row.cells[0].textContent.trim()));
                 updateNetwork(cyNodes);
             }
         });
+
     </script>
 </body>
 </html>
