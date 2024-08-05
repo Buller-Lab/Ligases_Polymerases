@@ -313,7 +313,7 @@
                             <th data-sort-by="Length">Length</th>
                             <th data-sort-by="SeqID_Seed">SeqID</th>                                          
                             <th data-sort-by="Organism">Organism</th>   
-                            <th data-sort-by="Color">Annotation</th>                          
+                            <th data-sort-by="Annotation">Annotation</th>                          
                             <th data-sort-by="Sequence">Sequence</th>                                                                        
                         </tr>
                     </thead>
@@ -345,7 +345,7 @@
                             <td>${node.data('Length')}</td>
                             <td>${node.data('SeqID_Seed')}</td>
                             <td>${node.data('Organism')}</td>
-                            <td>${node.data('Color')}</td>
+                            <td>${node.data('Annotation')}</td>
                             <td>${node.data('Sequence')}</td>
                         `;
                         tableBody.appendChild(row);
@@ -359,7 +359,7 @@
                     var annotations = new Set();
                 
                     cy.nodes().forEach(function(node) {
-                        annotations.add(node.data('Color'));
+                        annotations.add(node.data('Annotation'));
                     });
                 
                     dropdown.innerHTML = '<option value="">Select an annotation</option>'; // Reset dropdown
@@ -406,7 +406,7 @@
                     });
                 }
             
-                fetch('./static/petase_60.cyjs')
+                fetch('./static/DD_peptidase.cyjs)
                     .then(response => response.json())
                     .then(data => {
                         let elements = data.elements.nodes.concat(data.elements.edges);
@@ -535,7 +535,7 @@
                                 'Length': row.cells[2].textContent.trim(),
                                 'SeqID_Seed': row.cells[3].textContent.trim(),
                                 'Organism': row.cells[4].textContent.trim(),
-                                'Color': row.cells[5].textContent.trim(),
+                                'Annotation': row.cells[5].textContent.trim(),
                                 'Sequence': row.cells[6].textContent.trim()
                             });
                         } else {
