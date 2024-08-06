@@ -484,6 +484,12 @@
                 var filterSeqIDFromInput = document.querySelector('#filter-SeqID-from');
                 var filterSeqIDToInput = document.querySelector('#filter-SeqID-to');
                 var applyFiltersButton = document.querySelector('#apply-filters');
+
+                filterAnnotationInput.addEventListener('input', handleFilter);
+                filterLengthFromInput.addEventListener('input', handleFilter);
+                filterLengthToInput.addEventListener('input', handleFilter);
+                filterSeqIDFromInput.addEventListener('input', handleFilter);
+                filterSeqIDToInput.addEventListener('input', handleFilter);
                 
                 function handleFilter() {
                     var filterAnnotationValue = filterAnnotationInput.value.trim().toLowerCase();
