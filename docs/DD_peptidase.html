@@ -541,54 +541,82 @@
                             seqIDMatch = !isNaN(seqIDCellValue) && seqIDCellValue <= toValue;
                         }
                     
-                        if (annotationMatch && lengthMatch && seqIDMatch) {
+                        var match = annotationMatch && lengthMatch && seqIDMatch;
+                    
+                        if (match) {
                             row.style.display = '';
                             visibleCount++;
                             filteredData.push({
-                                'ID': row.cells[0].textContent.trim(),
-                                'Name': row.cells[1].textContent.trim(),
-                                'Length': row.cells[2].textContent.trim(),
-                                'SeqID_Seed': row.cells[3].textContent.trim(),
-                                'Organism': row.cells[4].textContent.trim(),
-                                'Annotation': row.cells[5].textContent.trim(),
-                                'Sequence': row.cells[6].textContent.trim()
+                                ID: row.cells[0].textContent,
+                                Name: row.cells[1].textContent,
+                                Length: row.cells[2].textContent,
+                                SeqID_Seed: row.cells[3].textContent,
+                                Organism: row.cells[4].textContent,
+                                Annotation: row.cells[5].textContent,
+                                Sequence: row.cells[6].textContent
                             });
                         } else {
                             row.style.display = 'none';
                         }
                     });
                 
-                    var popup = document.createElement('div');
-                    popup.className = 'popup';
-                    popup.innerHTML = `
-                        <h3>Filter Results</h3>
-                        <p>Filtered entries count: ${visibleCount}</p>
-                        <a href="#" id="download-excel">Download Excel File</a>
-                        <button id="close-popup">Close</button>
-                    `;
-                    var overlay = document.createElement('div');
-                    overlay.className = 'popup-overlay';
-                    document.body.appendChild(overlay);
-                    document.body.appendChild(popup);
+                    var excelURL = generateExcelFile(filteredData);
+                    var downloadLink = document.createElement('a');
+                    downloadLink.href = excelURL;
+                    downloadLink.download = 'filtered_data.xlsx';
+                    downloadLink.click();
                 
-                    document.getElementById('download-excel').addEventListener('click', function() {
-                        var url = generateExcelFile(filteredData);
-                        var a = document.createElement('a');
-                        a.href = url;
-                        a.download = 'filtered_data.xlsx';
-                        document.body.appendChild(a);
-                        a.click();
-                        document.body.removeChild(a);
-                        URL.revokeObjectURL(url); // Clean up URL object
+                    var message = visibleCount > 0 ? 
+                        `Filters applied. ${visibleCount} records match the criteria.` :
+                        'No records match the criteria.';
+                    alert(message);
+                
+                    // Update Cytoscape Network
+                    var filteredNodes = cy.nodes().filter(node => {
+                        var data = node.data();
+                        var annotationMatch = filterAnnotationValue === "" || data.Annotation.toLowerCase() === filterAnnotationValue;
+                        var lengthMatch = true;
+                        var seqIDMatch = true;
+                    
+                        if (filterLengthFromValue && filterLengthToValue) {
+                            var fromValue = parseInt(filterLengthFromValue, 10);
+                            var toValue = parseInt(filterLengthToValue, 10);
+                            lengthMatch = !isNaN(data.Length) && data.Length >= fromValue && data.Length <= toValue;
+                        } else if (filterLengthFromValue) {
+                            var fromValue = parseInt(filterLengthFromValue, 10);
+                            lengthMatch = !isNaN(data.Length) && data.Length >= fromValue;
+                        } else if (filterLengthToValue) {
+                            var toValue = parseInt(filterLengthToValue, 10);
+                            lengthMatch = !isNaN(data.Length) && data.Length <= toValue;
+                        }
+                    
+                        if (filterSeqIDFromValue && filterSeqIDToValue) {
+                            var fromValue = parseFloat(filterSeqIDFromValue);
+                            var toValue = parseFloat(filterSeqIDToValue);
+                            seqIDMatch = !isNaN(data.SeqID_Seed) && data.SeqID_Seed >= fromValue && data.SeqID_Seed <= toValue;
+                        } else if (filterSeqIDFromValue) {
+                            var fromValue = parseFloat(filterSeqIDFromValue);
+                            seqIDMatch = !isNaN(data.SeqID_Seed) && data.SeqID_Seed >= fromValue;
+                        } else if (filterSeqIDToValue) {
+                            var toValue = parseFloat(filterSeqIDToValue);
+                            seqIDMatch = !isNaN(data.SeqID_Seed) && data.SeqID_Seed <= toValue;
+                        }
+                    
+                        return annotationMatch && lengthMatch && seqIDMatch;
                     });
                 
-                    document.getElementById('close-popup').addEventListener('click', function() {
-                        document.body.removeChild(popup);
-                        document.body.removeChild(overlay);
-                    });
+                    updateNetwork(filteredNodes);
                 }
             
-                applyFiltersButton.addEventListener('click', applyFilters);
+                // Attach event listeners to filter inputs and dropdowns
+                filterAnnotationDropdown.addEventListener('change', applyFilters);
+                filterLengthFromInput.addEventListener('input', applyFilters);
+                filterLengthToInput.addEventListener('input', applyFilters);
+                filterSeqIDFromInput.addEventListener('input', applyFilters);
+                filterSeqIDToInput.addEventListener('input', applyFilters);
+            
+                // Initial load
+                applyFilters();
             });
             </script>
 
