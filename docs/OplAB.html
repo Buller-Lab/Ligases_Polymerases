@@ -57,21 +57,7 @@
         }
 
 
-        .button-container {
-            display: flex;
-            gap: 10px;
-            overflow-y: auto;
-            overflow-x: auto;
-            padding: 10px;
-            scroll-behavior: smooth;
-            flex: 1;
-            margin: 0; /* Override margin */
-        }
-
-        .button-container::-webkit-scrollbar {
-            display: auto; /* Hide scrollbar for WebKit browsers */
-        }
-
+        /* Adjust button styles */
         .button-container button {
             padding: 10px;
             border: none;
@@ -92,16 +78,17 @@
             margin: 0; /* Override margin */
         }
 
-        .button-container button:hover {
-            background-color: #0076c493;
-        }
-
+        /* Ensure images fit within buttons */
         .button-container button img {
-            max-width: 20vh;
-            height: 20%;
+            max-width: 100%; /* Adjust based on your needs */
+            max-height: 150px; /* Set maximum height */
+            width: auto; /* Maintain aspect ratio */
+            height: auto; /* Maintain aspect ratio */
             margin-bottom: 10px;
+            object-fit: cover; /* Ensure image covers the space without distortion */
         }
 
+        /* Button general styles */
         button {
             background-color: #0077C4;
             color: white;
@@ -110,16 +97,16 @@
             cursor: pointer;
             font-size: 18px;
             border-radius: 8px;
-            /* New styles for background images */
-            background-size: contain;
-            background-repeat: no-repeat;
-            margin-right: 10px;
-            margin-bottom: 10px;
-            margin-left: 10px;
-            margin-top: 10px;    
             display: inline-block;
             max-height: 65vh;
             max-width: 20vh;
+            text-align: center;
+            line-height: 1.4; /* Adjust line-height to better fit text */
+        }
+
+        /* Hover effect */
+        .button-container button:hover {
+            background-color: #0076c493;
         }
 
         .bold-number {
@@ -164,14 +151,15 @@
                 EC: 3.5.2.9, 3.5.2.14<br>
                 e.g. 5-oxoprolinase<br>(ATP-hydrolysing)
             </button>   
-                <button onclick="location.href='OplB.html'">
-                    <img src="./static/oplab.png" alt="">
-                    <span class="bold-number">Chain A (OplA-like)</span><br>
-                    Hydantoinase/<br>Oxoprolinase family<br>
-                    EC: 3.5.2.9, 3.5.2.14<br>
-                    e.g. 5-oxoprolinase<br>(ATP-hydrolysing)
-                </button>         
+            <button onclick="location.href='OplB.html'">
+                <img src="./static/oplab.png" alt="">
+                <span class="bold-number">Chain A (OplA-like)</span><br>
+                Hydantoinase/<br>Oxoprolinase family<br>
+                EC: 3.5.2.9, 3.5.2.14<br>
+                e.g. 5-oxoprolinase<br>(ATP-hydrolysing)
+            </button>         
         </div>
+
         <div style="margin-top: 10px; text-align: center;">    
             <button class="button" onclick="window.location.href='https://ccbiozhaw.github.io/CyclAmidImid/'">Back</button>  
         </div>        
