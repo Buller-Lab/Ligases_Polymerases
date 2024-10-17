@@ -1,6 +1,6 @@
 ## This is the GitHub Repository for the publication: 
 
-#  Nature’s Toolbox for the Hydrolysis of Lactams and Cyclic Imides (to be published)
+#  Nature’s Toolbox for the Hydrolysis of Lactams and Cyclic Imides
 
 Peter Stockinger, [a] and Rebecca Buller*[a]
 
@@ -29,4 +29,4 @@ Python scripts that were used to collect and cluster the sequences are also prov
 
 ## Citation
 Please cite the following review if you found this ressource helpful:
-DOI t.b.d.
+[DOI t.b.d.](https://pubs.acs.org/doi/full/10.1021/acscatal.4c04474)
