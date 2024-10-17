@@ -10,8 +10,6 @@ Keywords: Amidase · Imidase · Hydrolase · Amidohydrolase ·Lactamase ·Lactam
 
 In this repository we provide a link to a webapp with all related enzyme families, as well as methods, data and code that were used to build the respective databases.
 
-![image](https://github.com/user-attachments/assets/33f5a252-cd52-4b03-b85d-a35f022a7b8f)
-
 
 ## Background
 
