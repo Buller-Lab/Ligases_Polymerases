@@ -29,4 +29,4 @@ Python scripts that were used to collect and cluster the sequences are also prov
 
 ## Citation
 Please cite the following review if you found this ressource helpful:
-[DOI t.b.d.](https://pubs.acs.org/doi/full/10.1021/acscatal.4c04474)
+https://pubs.acs.org/doi/full/10.1021/acscatal.4c04474
