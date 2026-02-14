@@ -119,6 +119,16 @@
                 return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
             }
 
+            function normalizeKey(key) {
+                if (key.startsWith('SeqID (') && key.endsWith(')')) {
+                    return 'SeqID_' + key.slice(7, -1).trim();
+                }
+                if (key.startsWith('SeqID_')) {
+                    return key;
+                }
+                return null;
+            }
+
             function buildTableHeader() {
                 const thead = document.querySelector('#node-table thead');
                 thead.innerHTML = '';
@@ -128,22 +138,29 @@
                     th.textContent = col;
                     tr.appendChild(th);
                 });
+
                 const seqColumns = new Set();
                 cy.nodes().forEach(node => {
                     Object.keys(node.data()).forEach(key => {
-                        if (key.startsWith('SeqID_')) seqColumns.add(key);
+                        const norm = normalizeKey(key);
+                        if (norm) seqColumns.add(key);
                     });
                 });
-                [...seqColumns].sort().forEach(col => {
-                    tableHeaders.push(col);
-                    const th = document.createElement('th');
-                    th.textContent = col;
-                    tr.appendChild(th);
-                });
+
+                [...seqColumns]
+                    .sort((a, b) => normalizeKey(a).localeCompare(normalizeKey(b)))
+                    .forEach(origKey => {
+                        tableHeaders.push(origKey);
+                        const th = document.createElement('th');
+                        th.textContent = origKey;
+                        tr.appendChild(th);
+                    });
+
                 tableHeaders.push('Annotation');
                 const annTh = document.createElement('th');
                 annTh.textContent = 'Annotation';
                 tr.appendChild(annTh);
+
                 thead.appendChild(tr);
             }
 
@@ -157,11 +174,19 @@
                     tr.innerHTML += `<td>${escapeHtml(data.name || data.id || '')}</td>`;
                     tr.innerHTML += `<td>${escapeHtml(data.Sequence || data.sequence || '')}</td>`;
                     tr.innerHTML += `<td>${data.Length || data.length || ''}</td>`;
-                    tableHeaders.forEach(col => {
-                        if (col.startsWith('SeqID_')) {
-                            tr.innerHTML += `<td>${data[col] ?? ''}</td>`;
+
+                    for (let i = 3; i < tableHeaders.length - 1; i++) {
+                        const header = tableHeaders[i];
+                        let value = '';
+                        const norm = normalizeKey(header);
+                        if (norm && data[norm] !== undefined) {
+                            value = data[norm];
+                        } else if (data[header] !== undefined) {
+                            value = data[header];
                         }
-                    });
+                        tr.innerHTML += `<td>${value}</td>`;
+                    }
+
                     tr.innerHTML += `<td>${escapeHtml(data.Annotation || data.annotation || '')}</td>`;
                     tableBody.appendChild(tr);
                 });
@@ -186,7 +211,7 @@
 
             function populateSeqIDDropdown() {
                 var select = document.getElementById('seqid-column-select');
-                var seqCols = tableHeaders.filter(h => h.startsWith('SeqID_'));
+                var seqCols = tableHeaders.filter(h => normalizeKey(h) !== null);
                 select.innerHTML = '<option value="">— select seed —</option>';
                 seqCols.forEach(col => {
                     var option = document.createElement('option');
@@ -201,23 +226,25 @@
                 var filterAnnotationValue = document.getElementById('filter-annotation').value.trim().toLowerCase();
                 var filterLengthFromValue = document.getElementById('filter-length-from').value.trim();
                 var filterLengthToValue   = document.getElementById('filter-length-to').value.trim();
-                var selectedSeqCol        = document.getElementById('seqid-column-select').value;
+                var selectedSeqColDisplay = document.getElementById('seqid-column-select').value;
                 var filterSeqIDFromValue  = document.getElementById('filter-SeqID-from').value.trim();
                 var filterSeqIDToValue    = document.getElementById('filter-SeqID-to').value.trim();
+
+                const selectedNormKey = selectedSeqColDisplay ? normalizeKey(selectedSeqColDisplay) : null;
 
                 var rows = document.querySelectorAll('#node-table tbody tr');
                 var visibleCount = 0;
                 var filteredData = [];
 
                 const annIdx = Array.from(document.querySelectorAll('#node-table th')).findIndex(th => th.textContent.trim() === 'Annotation');
-                const lenIdx = Array.from(document.querySelectorAll('#node-table th')).findIndex(th => th.textContent.trim() === 'Length');
-                const seqIdx = selectedSeqCol ? Array.from(document.querySelectorAll('#node-table th')).findIndex(th => th.textContent.trim() === selectedSeqCol) : -1;
+                const lenIdx  = Array.from(document.querySelectorAll('#node-table th')).findIndex(th => th.textContent.trim() === 'Length');
+                const seqIdx  = selectedSeqColDisplay ? Array.from(document.querySelectorAll('#node-table th')).findIndex(th => th.textContent.trim() === selectedSeqColDisplay) : -1;
 
                 rows.forEach(function(row) {
                     var cells = row.cells;
                     var annotation = annIdx >= 0 ? cells[annIdx].textContent.trim().toLowerCase() : '';
-                    var lengthVal  = lenIdx >= 0 ? parseFloat(cells[lenIdx].textContent.trim()) : NaN;
-                    var seqIDVal   = seqIdx >= 0 ? parseFloat(cells[seqIdx].textContent.trim()) : NaN;
+                    var lengthVal  = lenIdx  >= 0 ? parseFloat(cells[lenIdx].textContent.trim())  : NaN;
+                    var seqIDVal   = seqIdx  >= 0 ? parseFloat(cells[seqIdx].textContent.trim())   : NaN;
 
                     var annotationMatch = (filterAnnotationValue === "" || annotation.includes(filterAnnotationValue));
 
@@ -231,7 +258,7 @@
                     }
 
                     let seqIDMatch = true;
-                    if (selectedSeqCol) {
+                    if (selectedNormKey) {
                         const hasSeqFrom = filterSeqIDFromValue !== "" && !isNaN(parseFloat(filterSeqIDFromValue));
                         const hasSeqTo   = filterSeqIDToValue   !== "" && !isNaN(parseFloat(filterSeqIDToValue));
                         if (hasSeqFrom || hasSeqTo) {
@@ -251,7 +278,7 @@
                             Annotation: cells[cells.length - 1].textContent.trim()
                         };
                         tableHeaders.forEach((col, idx) => {
-                            if (col.startsWith('SeqID_')) {
+                            if (normalizeKey(col)) {
                                 const cellIndex = 3 + tableHeaders.slice(3, -1).indexOf(col);
                                 rowData[col] = cells[cellIndex] ? cells[cellIndex].textContent.trim() : '';
                             }
