@@ -72,7 +72,7 @@
             <div id="cy"></div>
             <div id="loading" class="loading">
                 <div class="spinner"></div>
-                <div class="loading-text">Loading & combining network parts...</div>
+                <div class="loading-text">Loading network...</div>
                 <div class="progress-bar-container"><div class="progress-bar" id="progress-bar"></div></div>
             </div>
         </div>
@@ -132,7 +132,7 @@
                 const seqColumns = new Set();
                 cy.nodes().forEach(node => {
                     Object.keys(node.data()).forEach(key => {
-                        if (key.startsWith('SeqID_')) seqColumns.add(key);
+                        if (key.startsWith('SeqID')) seqColumns.add(key);
                     });
                 });
                 [...seqColumns].sort().forEach(col => {
@@ -159,7 +159,7 @@
                     tr.innerHTML += `<td>${escapeHtml(data.Sequence || data.sequence || '')}</td>`;
                     tr.innerHTML += `<td>${data.Length || data.length || ''}</td>`;
                     tableHeaders.forEach(col => {
-                        if (col.startsWith('SeqID_')) {
+                        if (col.startsWith('SeqID')) {
                             tr.innerHTML += `<td>${data[col] ?? ''}</td>`;
                         }
                     });
@@ -347,8 +347,8 @@
             document.getElementById('apply-filters').addEventListener('click', applyFilters);
 
             const networkFiles = [
-                './static/SeqID_network_DNA_polymerase_B_part1.cyjs',
-                './static/SeqID_network_DNA_polymerase_B_part2.cyjs'
+                './static/SeqID_network_DNA_polymerase_family_B_part1.cyjs',
+                './static/SeqID_network_DNA_polymerase_family_B_part2.cyjs'                
             ];
 
             function mergeElements(target, source) {

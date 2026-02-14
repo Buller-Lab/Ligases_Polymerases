@@ -345,7 +345,7 @@
 
             document.getElementById('apply-filters').addEventListener('click', applyFilters);
 
-            fetch('./static/SeqID_network_DNA_polymerase_family_X.cyjs')
+            fetch('/static/.SeqID_network_DNA_polymerase_family_X.cyjs')
                 .then(response => response.json())
                 .then(data => {
                     let elements = data.elements.nodes.concat(data.elements.edges);
