@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cytoscape.js Visualization</title>
+    <title>Cytoscape.js Visualization – DNA polymerase family B</title>
     <style>
         body { font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 0; background-color: #f0f0f0; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
         .container { display: flex; width: 100%; max-width: 100%; margin-top: 10px; }
@@ -40,7 +40,7 @@
     <div class="container">
         <div class="sidebar">
             <div style="margin-top: 10px; font-size: 2em; font-weight: bold;">DNA polymerase family B</div>
-            <div><img src="./static/DNA_polymerase_B.png" alt="" style="max-width: 100%;"></div>
+            <div><img src="./static/DNA_polymerase_family_B.png" alt="" style="max-width: 100%;"></div>
             <div style="margin-top: 10px; font-size: 1.5em; font-weight: bold;">Filters</div>
             <div class="spaced-div">
                 <label for="filter-annotation">Annotation:</label>
@@ -72,7 +72,7 @@
             <div id="cy"></div>
             <div id="loading" class="loading">
                 <div class="spinner"></div>
-                <div class="loading-text">Loading network...</div>
+                <div class="loading-text">Loading & combining network parts...</div>
                 <div class="progress-bar-container"><div class="progress-bar" id="progress-bar"></div></div>
             </div>
         </div>
@@ -82,7 +82,7 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             var cy = window.cy = cytoscape({
                 container: document.getElementById('cy'),
                 elements: [],
@@ -93,6 +93,7 @@
             var loadingIndicator = document.getElementById('loading');
             var progressBar = document.getElementById('progress-bar');
             var progressBarContainer = document.querySelector('.progress-bar-container');
+
             let tableHeaders = ['Name', 'Sequence', 'Length'];
 
             const scrollBtn = document.getElementById('scroll-to-table');
@@ -186,7 +187,7 @@
 
             function populateSeqIDDropdown() {
                 var select = document.getElementById('seqid-column-select');
-                var seqCols = tableHeaders.filter(h => h.startsWith('SeqID_'));
+                var seqCols = tableHeaders.filter(h => h.startsWith('SeqID'));
                 select.innerHTML = '<option value="">— select seed —</option>';
                 seqCols.forEach(col => {
                     var option = document.createElement('option');
@@ -251,7 +252,7 @@
                             Annotation: cells[cells.length - 1].textContent.trim()
                         };
                         tableHeaders.forEach((col, idx) => {
-                            if (col.startsWith('SeqID_')) {
+                            if (col.startsWith('SeqID')) {
                                 const cellIndex = 3 + tableHeaders.slice(3, -1).indexOf(col);
                                 rowData[col] = cells[cellIndex] ? cells[cellIndex].textContent.trim() : '';
                             }
@@ -345,36 +346,66 @@
 
             document.getElementById('apply-filters').addEventListener('click', applyFilters);
 
-            fetch('./static/SeqID_network_DNA_polymerase_B.cyjs')
-                .then(response => response.json())
-                .then(data => {
-                    let elements = data.elements.nodes.concat(data.elements.edges);
-                    let chunkSize = 100;
-                    let index = 0;
-                    function loadChunk() {
-                        if (index < elements.length) {
-                            let chunk = elements.slice(index, index + chunkSize);
-                            cy.add(chunk);
-                            index += chunkSize;
-                            let progress = (index / elements.length) * 100;
-                            progressBar.style.width = progress + '%';
-                            progressBarContainer.style.display = 'block';
-                            requestAnimationFrame(loadChunk);
-                        } else {
-                            cy.fit();
-                            buildTableHeader();
-                            updateTable(cy.nodes());
-                            loadingIndicator.style.display = 'none';
-                            progressBarContainer.style.display = 'none';
-                            updateArrowDirection();
-                        }
+            const networkFiles = [
+                './static/SeqID_network_DNA_polymerase_B_part1.cyjs',
+                './static/SeqID_network_DNA_polymerase_B_part2.cyjs'
+            ];
+
+            function mergeElements(target, source) {
+                const nodeMap = new Map(target.nodes.map(n => [n.data.id, n]));
+                source.nodes.forEach(srcNode => {
+                    const id = srcNode.data.id;
+                    if (!nodeMap.has(id)) {
+                        target.nodes.push(srcNode);
+                        nodeMap.set(id, srcNode);
                     }
-                    loadChunk();
-                })
-                .catch(error => {
-                    console.error('Error loading cyjs file:', error);
-                    loadingIndicator.textContent = 'Error loading network data';
                 });
+                target.edges.push(...source.edges);
+            }
+
+            Promise.all(
+                networkFiles.map(file =>
+                    fetch(file).then(r => {
+                        if (!r.ok) throw new Error(`Failed to load ${file}`);
+                        return r.json();
+                    })
+                )
+            )
+            .then(jsons => {
+                const combined = { nodes: [], edges: [] };
+                jsons.forEach(data => {
+                    const elements = data.elements || data;
+                    mergeElements(combined, elements);
+                });
+
+                const allElements = [...combined.nodes, ...combined.edges];
+                let chunkSize = 150;
+                let index = 0;
+
+                function loadChunk() {
+                    if (index < allElements.length) {
+                        let chunk = allElements.slice(index, index + chunkSize);
+                        cy.add(chunk);
+                        index += chunkSize;
+                        let progress = (index / allElements.length) * 100;
+                        progressBar.style.width = progress + '%';
+                        progressBarContainer.style.display = 'block';
+                        requestAnimationFrame(loadChunk);
+                    } else {
+                        cy.fit();
+                        buildTableHeader();
+                        updateTable(cy.nodes());
+                        loadingIndicator.style.display = 'none';
+                        progressBarContainer.style.display = 'none';
+                        updateArrowDirection();
+                    }
+                }
+                loadChunk();
+            })
+            .catch(error => {
+                console.error('Error loading network parts:', error);
+                loadingIndicator.innerHTML = '<div class="spinner"></div>Error loading network parts<br><small>Check console for details</small>';
+            });
         });
     </script>
 </body>

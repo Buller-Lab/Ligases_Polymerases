@@ -158,7 +158,7 @@
                     tr.innerHTML += `<td>${escapeHtml(data.Sequence || data.sequence || '')}</td>`;
                     tr.innerHTML += `<td>${data.Length || data.length || ''}</td>`;
                     tableHeaders.forEach(col => {
-                        if (col.startsWith('SeqID_')) {
+                        if (col.startsWith('SeqID')) {
                             tr.innerHTML += `<td>${data[col] ?? ''}</td>`;
                         }
                     });
